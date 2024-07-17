@@ -67,6 +67,8 @@ jobs:
           git push origin v${{ github.run_number }}
 
       - name: Create GitHub Issue for release
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           echo "Дата: $(date)" >> issue.txt
           echo "Автор релиза: $GITHUB_ACTOR" >> issue.txt
