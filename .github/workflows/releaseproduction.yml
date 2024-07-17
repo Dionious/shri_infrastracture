@@ -72,15 +72,6 @@ jobs:
             docker ps
           EOF
 
-      - name: Wait for container to start
-        run: sleep 10
-
-      - name: Check container logs
-        run: docker logs shri-infra
-
-      - name: Check running containers
-        run: docker ps
-
       - name: Comment on GitHub Issue about deployment
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
