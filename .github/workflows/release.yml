@@ -42,7 +42,7 @@ jobs:
         run: npm install
 
       - name: Run npm build script for Docker
-        run: npm run docker:build
+        run: npm run build:docker
 
       - name: Build Docker image
         run: |
