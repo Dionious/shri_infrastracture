@@ -1,0 +1,79 @@
+name: Hotfix Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release version'
+        required: true
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.15.1'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run type checking
+        run: npm run type-check
+
+      - name: Run tests
+        run: npm run test
+
+  hotfix:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.15.1'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Docker image
+        run: |
+          docker build -t cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_fix${{ github.run_number }} .
+          docker tag cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_fix${{ github.run_number }} cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
+
+      - name: Push Docker image to Container Registry
+        run: |
+          echo ${{ secrets.YANDEX_REGISTRY_OAUTH_TOKEN }} | docker login --username oauth --password-stdin cr.yandex
+          docker push cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_fix${{ github.run_number }}
+          docker push cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
+
+      - name: Create hotfix tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git checkout releases/${{ github.event.inputs.release_version }}
+          git tag -a v${{ github.event.inputs.release_version }}_fix${{ github.run_number }} -m "Hotfix version ${{ github.event.inputs.release_version }}_fix${{ github.run_number }}"
+          git push https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git v${{ github.event.inputs.release_version }}_fix${{ github.run_number }}
+
+      - name: Comment on GitHub Issue for hotfix
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          echo "Дата: $(date)" >> comment.txt
+          echo "Автор фикса: $GITHUB_ACTOR" >> comment.txt
+          echo "Список коммитов от предыдущего релизного (или фиксрелизного) тега:" >> comment.txt
+          git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0)..HEAD >> comment.txt
+          echo "Ссылка на docker-образ в Yandex Container Registry:" >> comment.txt
+          echo "cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_fix${{ github.run_number }}" >> comment.txt
+          gh issue comment $(gh issue list --search "Релиз ${{ github.event.inputs.release_version }}" --json number --jq '.[0].number') --body-file comment.txt
