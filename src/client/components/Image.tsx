@@ -12,4 +12,4 @@ const bem = cn('Image');
 
 export const Image: React.FC<ImageProps> = ({ className, src = STUB }) => {
     return <img className={bem(null, [className])} src={src} />;
-}
+};

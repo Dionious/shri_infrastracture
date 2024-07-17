@@ -117,4 +117,4 @@ export const Cart: React.FC = () => {
             {form}
         </div>
     );
-}
+};

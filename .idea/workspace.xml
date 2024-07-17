@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97de0356-fe5c-41d6-8d2b-5d817b1cf2f0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+    <list default="true" id="97de0356-fe5c-41d6-8d2b-5d817b1cf2f0" name="Changes" comment="try github actions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,6 +14,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -41,7 +45,7 @@
   "keyToString": {
     "Jest.About.Should render author name.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "test-branch",
     "javascript.nodejs.core.library.configured.version": "20.11.1",
     "javascript.nodejs.core.library.typings.version": "20.11.30",
     "node.js.detected.package.eslint": "true",
@@ -105,11 +109,41 @@
       <updated>1721196822574</updated>
       <workItem from="1721196825005" duration="3718000" />
       <workItem from="1721201722747" duration="684000" />
-      <workItem from="1721202727489" duration="3399000" />
+      <workItem from="1721202727489" duration="4669000" />
     </task>
+    <task id="LOCAL-00001" summary="add docker + try start ci/cd">
+      <option name="closed" value="true" />
+      <created>1721206609015</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1721206609015</updated>
+    </task>
+    <task id="LOCAL-00002" summary="try github actions">
+      <option name="closed" value="true" />
+      <created>1721206778349</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1721206778349</updated>
+    </task>
+    <task id="LOCAL-00003" summary="try github actions">
+      <option name="closed" value="true" />
+      <created>1721207268752</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1721207268752</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add docker + try start ci/cd" />
+    <MESSAGE value="try github actions" />
+    <option name="LAST_COMMIT_MESSAGE" value="try github actions" />
   </component>
 </project>

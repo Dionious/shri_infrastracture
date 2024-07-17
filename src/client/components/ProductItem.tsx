@@ -26,4 +26,4 @@ export const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
             </div>
         </div>
     );
-}
+};

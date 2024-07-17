@@ -87,4 +87,4 @@ export const Form: React.FC<FormProps> = ({ onSubmit }) => {
             <button className={bem('Submit', ['btn', 'btn-primary'])} disabled={sent} onClick={onClick}>Checkout</button>
         </div>
     );
-}
+};
