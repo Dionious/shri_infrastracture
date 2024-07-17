@@ -41,12 +41,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run npm build script for Docker
-        run: npm run build:docker -- --tag cr.yandex/crp6noc3f61saaotgjop/app:${{ github.run_number }}
-
       - name: Build Docker image
         run: |
+          docker build -t cr.yandex/crp6noc3f61saaotgjop/app:${{ github.run_number }} .
           docker tag cr.yandex/crp6noc3f61saaotgjop/app:${{ github.run_number }} cr.yandex/crp6noc3f61saaotgjop/app:${{ github.run_number }}_latest
+
+      - name: Verify files copied to Docker context
+        run: ls -la
+
+      - name: Verify Docker image
+        run: docker images
 
       - name: Push Docker image to Container Registry
         run: |
