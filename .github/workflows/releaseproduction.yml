@@ -39,10 +39,38 @@ jobs:
             echo "No existing container with name shri-infra found."
           fi  
 
-      - name: SSH into production server and run Docker container
+      - name: Deploy to production server
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          docker pull cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
-          docker run -d -p 3000:3000 --name shri-infra cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/shrikeys
+          chmod 600 ~/.ssh/shrikeys
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/shrikeys ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            # Check for existing container
+            CONTAINER_ID=$(docker ps -aqf "name=shri-infra")
+            if [ -n "$CONTAINER_ID" ]; then
+              docker stop $CONTAINER_ID
+              docker rm $CONTAINER_ID
+            else
+              echo "No existing container with name shri-infra found."
+            fi  
+            
+            # Pull and run the new container
+            docker pull cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
+            docker run -d -p 3000:3000 --name shri-infra cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
+            
+            # Wait for the container to start
+            sleep 10
+            
+            # Check container logs
+            docker logs shri-infra
+            
+            # Check running containers
+            docker ps
+          EOF
 
       - name: Wait for container to start
         run: sleep 10
