@@ -68,7 +68,7 @@ function createRootReducer(state: Partial<ApplicationState>) {
                 draft.cart[id].count++;
 
                 draft.latestOrderId = undefined;
-                break
+                break;
             case 'CLEAR_CART':
                 draft.cart = {};
                 draft.latestOrderId = undefined;

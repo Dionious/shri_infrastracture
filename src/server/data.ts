@@ -1,4 +1,4 @@
-import { Faker, en } from '@faker-js/faker'
+import { Faker, en } from '@faker-js/faker';
 import { Order, Product, ProductShortInfo } from '../common/types';
 
 export const faker = new Faker({
@@ -9,7 +9,7 @@ const commerce = faker.commerce;
 const cats = faker.animal;
 
 const generateProducts = () => {
-    const products: Product[] = []
+    const products: Product[] = [];
 
     for(let id = 0; id < 27; id++) {
         products.push({
@@ -23,7 +23,7 @@ const generateProducts = () => {
     }
 
     return products;
-}
+};
 
 function getShortInfo({ id, name, price }: Product): ProductShortInfo {
     return { id, name, price };

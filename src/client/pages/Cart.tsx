@@ -6,7 +6,7 @@ import { cn } from '@bem-react/classname';
 
 import { CheckoutFormData } from '../../common/types';
 import { Form } from '../components/Form';
-import { ApplicationState, checkout, clearCart } from '../store';
+import { ApplicationState, checkout, clearCart } from '../store'
 
 const bem = cn('Cart');
 
@@ -117,4 +117,4 @@ export const Cart: React.FC = () => {
             {form}
         </div>
     );
-}
+};
