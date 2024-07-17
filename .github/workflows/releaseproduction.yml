@@ -1,0 +1,43 @@
+name: Deployment Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Version of the release to deploy'
+        required: true
+
+jobs:
+  deploy_to_prod:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to Yandex Container Registry
+        run: echo ${{ secrets.YANDEX_REGISTRY_OAUTH_TOKEN }} | docker login --username oauth --password-stdin cr.yandex
+
+      - name: Check Docker image existence in Container Registry
+        run: |
+          IMAGE="cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest"
+          if docker pull $IMAGE; then
+            echo "Docker image $IMAGE found."
+          else
+            echo "Error: Docker image $IMAGE not found."
+            exit 1
+          fi
+
+      - name: SSH into production server and run Docker container
+        run: |
+          docker stop shri-infra || true
+          docker rm shri-infra || true
+          docker pull cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
+          docker run -d -p 3000:3000 --name shri-infra cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
+
+      - name: Comment on GitHub Issue about deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          echo "Релиз ${{ github.event.inputs.release_version }} успешно выкачен в прод на $(date) пользователем $GITHUB_ACTOR." > comment.txt
+          gh issue comment $(gh issue list --search "Релиз ${{ github.event.inputs.release_version }}" --json number --jq '.[0].number') --body-file comment.txt
