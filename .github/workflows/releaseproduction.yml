@@ -28,10 +28,19 @@ jobs:
             exit 1
           fi
 
+
+      - name: Stop and remove existing container if running
+        run: |
+          CONTAINER_ID=$(docker ps -aqf "name=shri-infra")
+          if [ -n "$CONTAINER_ID" ]; then
+            docker stop $CONTAINER_ID
+            docker rm $CONTAINER_ID
+          else
+            echo "No existing container with name shri-infra found."
+          fi  
+
       - name: SSH into production server and run Docker container
         run: |
-          docker stop shri-infra || true
-          docker rm shri-infra || true
           docker pull cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
           docker run -d -p 3000:3000 --name shri-infra cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
 
