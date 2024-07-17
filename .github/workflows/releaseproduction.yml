@@ -42,8 +42,7 @@ jobs:
       - name: SSH into production server and run Docker container
         run: |
           docker pull cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
-          CONTAINER_ID=$(docker run -d -p 3000:3000 --name shri-infra cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest)
-          docker wait $CONTAINER_ID
+          docker run -d -p 3000:3000 --name shri-infra cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_latest
 
       - name: Comment on GitHub Issue about deployment
         env:
