@@ -62,6 +62,7 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git fetch origin # Обновление локального состояния репозитория
           git checkout releases/${{ github.event.inputs.release_version }}
           git tag -a v${{ github.event.inputs.release_version }}_fix${{ github.run_number }} -m "Hotfix version ${{ github.event.inputs.release_version }}_fix${{ github.run_number }}"
           git push https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git v${{ github.event.inputs.release_version }}_fix${{ github.run_number }}
