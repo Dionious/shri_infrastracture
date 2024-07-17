@@ -53,9 +53,13 @@ jobs:
           docker push cr.yandex/crp6noc3f61saaotgjop/app:${{ github.run_number }}_latest
 
       - name: Create release branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
           git checkout -b releases/${{ github.run_number }}
-          git push origin releases/${{ github.run_number }}
+          git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git releases/${{ github.run_number }}
 
       - name: Create tag for current version
         run: |
@@ -83,4 +87,4 @@ jobs:
           git commit -m "Update CHANGELOG for release ${{ github.run_number }}"
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
