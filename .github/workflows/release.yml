@@ -87,7 +87,15 @@ jobs:
           echo "Номер версии: ${{ github.run_number }}" >> issue.txt
           echo "Список коммитов от предыдущего релизного (или фиксрелизного) тега:" >> issue.txt
           git fetch --tags  # Обновляем теги, чтобы получить последние данные
-          git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0)..HEAD >> issue.txt
+          PREV_TAG_NUMBER=$(( ${GITHUB_RUN_NUMBER} - 1 ))
+          PREVIOUS_TAG="v${PREV_TAG_NUMBER}"
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "Нет предыдущих тегов" >> issue.txt
+          else
+            git fetch --tags  # Обновляем теги, чтобы получить последние данные
+            COMMITS=$(git log $PREVIOUS_TAG..HEAD --oneline)
+            echo "$COMMITS" >> issue.txt
+          fi
           echo "Ссылка на docker-образ в Yandex Container Registry:" >> issue.txt
           echo "cr.yandex/crp6noc3f61saaotgjop/app:${{ github.run_number }}" >> issue.txt
           gh issue create --title "Релиз ${{ github.run_number }}" --body-file issue.txt
