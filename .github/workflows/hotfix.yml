@@ -77,7 +77,16 @@ jobs:
           echo "Дата: $(date)" >> comment.txt
           echo "Автор фикса: $GITHUB_ACTOR" >> comment.txt
           echo "Список коммитов от предыдущего релизного (или фиксрелизного) тега:" >> comment.txt
-          git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0)..HEAD >> comment.txt
+          git fetch --tags  # Обновляем теги, чтобы получить последние данные
+          PREV_TAG_NUMBER=$(( ${GITHUB_RUN_NUMBER} - 1 ))
+          PREVIOUS_TAG="v${PREV_TAG_NUMBER}"
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "Нет предыдущих тегов" >> comment.txt
+          else
+            git fetch --tags  # Обновляем теги, чтобы получить последние данные
+            COMMITS=$(git log $PREVIOUS_TAG..HEAD --oneline)
+            echo "$COMMITS" >> comment.txt
+          fi
           echo "Ссылка на docker-образ в Yandex Container Registry:" >> comment.txt
           echo "cr.yandex/crp6noc3f61saaotgjop/app:${{ github.event.inputs.release_version }}_fix${{ github.run_number }}" >> comment.txt
           gh issue comment $(gh issue list --search "Релиз ${{ github.event.inputs.release_version }}" --json number --jq '.[0].number') --body-file comment.txt
