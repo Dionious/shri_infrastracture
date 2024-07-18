@@ -90,12 +90,13 @@ jobs:
 
       - name: Update CHANGELOG.md
         run: |
-          echo "# Версия ${{ github.run_number }}" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
-          echo "" >> CHANGELOG.md
-          echo "Список коммитов от предыдущего релизного (или фиксрелизного) тега:" >> CHANGELOG.md
-          git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0)..HEAD >> CHANGELOG.md
+          COMMITS=$(git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0 --exclude v${{ github.run_number }})..HEAD)
+          NEW_ENTRY="# Версия ${{ github.run_number }}\n\nСписок коммитов от предыдущего релизного (или фиксрелизного) тега:\n$COMMITS\n\n$(cat CHANGELOG.md)"
+          echo -e "$NEW_ENTRY" > CHANGELOG.md
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
           git add CHANGELOG.md
           git commit -m "Update CHANGELOG for release ${{ github.run_number }}"
-          git push origin main
+          git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
