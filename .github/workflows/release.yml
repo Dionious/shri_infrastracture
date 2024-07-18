@@ -107,4 +107,4 @@ jobs:
         run: |
           gh pr create --title "Release ${{ github.run_number }}" --body "Automatic release PR for version ${{ github.run_number }}" --head releases/${{ github.run_number }} --base main
           PR_NUMBER=$(gh pr list --head releases/${{ github.run_number }} --json number --jq '.[0].number')
-          gh pr merge $PR_NUMBER --admin
+          gh pr merge $PR_NUMBER --admin --merge
