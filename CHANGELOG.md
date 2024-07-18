@@ -1,3 +1,4 @@
+# Версия 28
 # Версия 27
 # Версия 21
 
@@ -8,3 +9,6 @@
 
 Список коммитов от предыдущего релизного (или фиксрелизного) тега:
 e87838d Merge pull request #54 from Dionious/fix_changelog_file9
+
+Список коммитов от предыдущего релизного (или фиксрелизного) тега:
+f3ef9e8 Merge pull request #57 from Dionious/fix_changelog_file10
