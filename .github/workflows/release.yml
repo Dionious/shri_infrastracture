@@ -100,7 +100,7 @@ jobs:
           if [ -z "$PREVIOUS_TAG" ]; then
             echo "Нет предыдущих тегов" >> CHANGELOG.md
           else
-            COMMITS=$(git log --pretty=format:"- %s (%h)" $PREVIOUS_TAG..HEAD)
+            COMMITS=$(git log $PREVIOUS_TAG..HEAD --oneline)
             echo "$COMMITS" >> CHANGELOG.md
           fi
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
