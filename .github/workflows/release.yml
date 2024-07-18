@@ -86,6 +86,7 @@ jobs:
           echo "Автор релиза: $GITHUB_ACTOR" >> issue.txt
           echo "Номер версии: ${{ github.run_number }}" >> issue.txt
           echo "Список коммитов от предыдущего релизного (или фиксрелизного) тега:" >> issue.txt
+          git fetch --tags  # Обновляем теги, чтобы получить последние данные
           git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0)..HEAD >> issue.txt
           echo "Ссылка на docker-образ в Yandex Container Registry:" >> issue.txt
           echo "cr.yandex/crp6noc3f61saaotgjop/app:${{ github.run_number }}" >> issue.txt
