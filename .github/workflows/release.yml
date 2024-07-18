@@ -75,6 +75,9 @@ jobs:
           git tag -a v${{ github.run_number }} -m "Release version ${{ github.run_number }}"
           git push origin v${{ github.run_number }}
 
+      - name: Return to main branch
+        run: git checkout main
+
       - name: Create GitHub Issue for release
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
