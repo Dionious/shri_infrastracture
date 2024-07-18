@@ -78,8 +78,9 @@ jobs:
           echo "Автор фикса: $GITHUB_ACTOR" >> comment.txt
           echo "Список коммитов от предыдущего релизного (или фиксрелизного) тега:" >> comment.txt
           git fetch --tags  # Обновляем теги, чтобы получить последние данные
-          PREV_TAG_NUMBER=$(( ${GITHUB_RUN_NUMBER} - 1 ))
-          PREVIOUS_TAG="v${PREV_TAG_NUMBER}"
+          PREV_VERSION=${{ github.event.inputs.release_version }}
+          PREVIOUS_VERSION=$((PREV_VERSION - 1))
+          PREVIOUS_TAG="v${PREVIOUS_VERSION}"
           if [ -z "$PREVIOUS_TAG" ]; then
             echo "Нет предыдущих тегов" >> comment.txt
           else
