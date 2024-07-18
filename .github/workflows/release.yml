@@ -89,6 +89,8 @@ jobs:
           gh issue create --title "Релиз ${{ github.run_number }}" --body-file issue.txt
 
       - name: Update CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           COMMITS=$(git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0 --exclude v${{ github.run_number }})..HEAD)
           NEW_ENTRY="# Версия ${{ github.run_number }}\n\nСписок коммитов от предыдущего релизного (или фиксрелизного) тега:\n$COMMITS\n\n$(cat CHANGELOG.md)"
@@ -97,6 +99,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git add CHANGELOG.md
           git commit -m "Update CHANGELOG for release ${{ github.run_number }}"
-          git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+          git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git HEAD:releases/${{ github.run_number }}
+
+      - name: Create and merge PR
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          gh pr create --title "Release ${{ github.run_number }}" --body "Automatic release PR for version ${{ github.run_number }}" --head releases/${{ github.run_number }} --base main
+          PR_NUMBER=$(gh pr list --head releases/${{ github.run_number }} --json number --jq '.[0].number')
+          gh pr merge $PR_NUMBER --admin
