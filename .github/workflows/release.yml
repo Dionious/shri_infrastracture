@@ -95,7 +95,8 @@ jobs:
           echo "# Версия ${{ github.run_number }}" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
           echo "" >> CHANGELOG.md
           echo "Список коммитов от предыдущего релизного (или фиксрелизного) тега:" >> CHANGELOG.md
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 --match "v*" --exclude "v${{ github.run_number }}")
+          PREV_TAG_NUMBER=$(( ${GITHUB_RUN_NUMBER} - 1 ))
+          PREVIOUS_TAG="v${PREV_TAG_NUMBER}"
           if [ -z "$PREVIOUS_TAG" ]; then
             echo "Нет предыдущих тегов" >> CHANGELOG.md
           else
