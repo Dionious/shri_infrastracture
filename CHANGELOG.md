@@ -1,3 +1,4 @@
+# Версия 30
 # Версия 29
 # Версия 28
 # Версия 27
@@ -16,3 +17,6 @@ f3ef9e8 Merge pull request #57 from Dionious/fix_changelog_file10
 
 Список коммитов от предыдущего релизного (или фиксрелизного) тега:
 e3618be Merge pull request #60 from Dionious/fix_changelog_file11
+
+Список коммитов от предыдущего релизного (или фиксрелизного) тега:
+867cce2 Merge pull request #65 from Dionious/feature/UvO1
