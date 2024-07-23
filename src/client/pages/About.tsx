@@ -14,6 +14,9 @@ export const About: React.FC = () => {
           <p>
             Author: Denis
           </p>
+          <p>
+            Проверяющий: Olga U
+          </p>
         </div>
       </div>
     </div>
